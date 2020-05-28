@@ -1,0 +1,17 @@
+﻿{% extends "admin/base.html" %}
+{% from "common/_macro.html" import static %}
+
+
+{% block page_title %}
+    <h1><i class="dashboard icon"></i>&nbsp;&nbsp;主页</h1>
+{% endblock %}
+
+{% block content %}
+    {{ myechart|safe }}
+    {{ mypie|safe }}
+    <ul class="count-bar">
+
+    </ul>
+{% endblock %}
+
+
