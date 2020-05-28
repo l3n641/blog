@@ -29,3 +29,26 @@ class Admin(Base):
     def check_pwd(self, raw_password):
         result = check_password_hash(self.password_hash, raw_password)
         return result
+
+
+class Post(Base):
+    __tablename__ = 'post'
+
+    title = db.Column(db.String(150), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey("admin.id"))
+    author = db.relationship("Admin", backref='post')
+
+
+post_tag = db.Table(
+    'post_tag',
+    db.Column('post_id', db.ForeignKey("post.id"), primary_key=True),
+    db.Column('tag_id', db.ForeignKey("tag.id"), primary_key=True)
+)
+
+
+class Tag(Base):
+    __tablename__ = 'tag'
+
+    name = db.Column(db.String(150))
+    post = db.relationship("Post", backref='tags', secondary=post_tag)
