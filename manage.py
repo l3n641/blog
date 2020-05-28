@@ -7,9 +7,11 @@ from app.models import Base
 from flask.cli import load_dotenv
 
 from app import create_app
+from commands import create_admin
 
 load_dotenv()
 app = create_app(os.getenv("FLASK_ENV"))
+app.cli.add_command(create_admin)
 
 
 @app.after_request
