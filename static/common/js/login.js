@@ -14,7 +14,7 @@ $(function () {
             },
             'success': function (data) {
                 if (data['code'] == 200) {
-                    window.location.href = '/admin/index/';
+                    window.location.href = '/admin/index';
                     console.log('登录成功！')
                 } else {
                     zlalert.alertInfoToast(data['message'])

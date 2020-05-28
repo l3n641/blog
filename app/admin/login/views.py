@@ -16,6 +16,7 @@ class LoginView(views.MethodView):
         if self.form.validate_on_submit():
             admin = admin_srv.get_by_email(self.form.data.get('email'))
             if admin and admin.check_pwd(self.form.data.get('password')):
+                session['admin_id'] = admin.id
                 response = {
                     "code": 200,
                     "message": "登陆成功"
