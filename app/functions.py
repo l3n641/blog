@@ -18,6 +18,7 @@ from app.extensions import db, redis
 from json import loads
 import hashlib
 from app.constants import TOKEN_EXPIRES
+import re
 
 
 def get_sub_modules(module_name):
@@ -201,3 +202,9 @@ def password_hash(password):
     h = hashlib.sha256()
     h.update(bytes(password, encoding='utf-8'))
     return h.hexdigest()
+
+
+def is_email(email):
+    ex_email = re.compile(r'^[\w][a-zA-Z1-9.]{4,19}@[a-zA-Z0-9]{2,3}.[com|gov|net]')
+    result = ex_email.match(email)
+    return result
