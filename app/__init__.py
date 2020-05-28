@@ -5,7 +5,7 @@ import logging
 from flask import Flask
 
 from app import resources
-from app.extensions import api, db, migrate, redis
+from app.extensions import api, db, migrate, redis, editor
 from app.admin import routers
 
 
@@ -22,5 +22,6 @@ def create_app(object_name):
     api.init_app(app)
     redis.init_app(app)
     routers.init_app(app)
+    editor.init_app(app)
 
     return app
