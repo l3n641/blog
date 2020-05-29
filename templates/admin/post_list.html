@@ -55,11 +55,10 @@
                     <tr data-post-id="{{ post.id }}">
                         <td><input type="checkbox" data-post-id="{{ post.id }}"></td>
                         <td>
-                            <a href=" " target="_blank">{{ post.title|truncate(20) }}</a>
+                            <a href="{{ url_for("admin.post_detail",_id=post.id) }} " target="_blank">{{ post.title|truncate(20) }}</a>
                         </td>
                         <td>
-                            <a href=" "
-                               title="{{ post.content|striptags }}">{{ post.content|striptags|truncate(40) }}</a>
+                            {{ post.content|striptags|truncate(40) }}
                         </td>
                         <td>{{ post.author.username }}</td>
                         <td>{{ post.author.email }}</td>

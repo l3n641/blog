@@ -1,5 +1,5 @@
 from app.admin.common_view import CommonView
-from flask import render_template, g, request
+from flask import render_template, g, request, abort
 from .forms import PostForm
 from flask_restful import reqparse, marshal, fields
 from app.extensions import editor
@@ -65,6 +65,7 @@ class PostSeachView(CommonView):
     posts 搜索
     """
 
+    @CommonView.login_required()
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument("title", type=str, required=True, help="标题必须存在")
@@ -82,3 +83,28 @@ class PostSeachView(CommonView):
         })
 
         return {"code": 200, "data": data}
+
+
+class PostDetailView(CommonView):
+
+    @CommonView.login_required()
+    def get(self, _id):
+        post = post_srv.get(_id) or abort(404)
+        post.tag_ids = [tag.id for tag in post.tags]
+        return render_template("admin/posts.html", post=post)
+
+    @CommonView.login_required()
+    def post(self, _id):
+        tag_ids = [tag.id for tag in tag_srv.get_all()]
+        parse = reqparse.RequestParser()
+        parse.add_argument("title", type=str, required=True, help="title必须存在")
+        parse.add_argument("content", type=str, required=True, help="content必须存在")
+        parse.add_argument("tags", choices=tag_ids, type=int, required=True, help="tags错误", action='append',
+                           location=["json", "form"])
+        data = parse.parse_args()
+        _id = post_srv.save(id=_id, **data)
+
+        if _id:
+            return {'code': '200', 'data': {"id": _id}}
+        else:
+            return self._service.get_error(), 400
