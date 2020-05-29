@@ -1,9 +1,10 @@
 from app.admin.common_view import CommonView
-from flask import render_template, g
+from flask import render_template, g, request
 from .forms import PostForm
 from flask_restful import reqparse, Resource
 from app.extensions import editor
 from app.services import post_srv, tag_srv
+from app.constants import DEFAULT_PAGE
 
 
 class PostView(CommonView):
@@ -36,4 +37,25 @@ class PostView(CommonView):
             return self._service.get_error(), 400
 
 
+class PostListView(CommonView):
+    """
+    post列表
+    """
+
+    def get(self):
+        page = int(request.args.get('page') or DEFAULT_PAGE)
+        posts = post_srv.get_list(page=page)
+        return render_template("admin/post_list.html", posts=posts)
+
+    @CommonView.login_required()
+    def post(self):
+        parse = reqparse.RequestParser()
+        parse.add_argument("id", type=int, required=True, help="post_id必须存在", action='append',
+                           location=["json", "form"])
+        data = parse.parse_args()
+
+        if post_srv.delete(data):
+            return '', 204
+        else:
+            return self._service.get_error(), 400
 

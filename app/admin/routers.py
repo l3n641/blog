@@ -1,6 +1,6 @@
 from .login.views import LoginView
 from .index.views import IndexView, ProfileView, RestPasswordView
-from .post.views import PostView
+from .post.views import PostView, PostListView
 from .tag.views import TagView
 
 from flask.blueprints import Blueprint
@@ -12,6 +12,7 @@ bp.add_url_rule('/profile', view_func=ProfileView.as_view('profile'), methods=['
 bp.add_url_rule('/repassword', view_func=RestPasswordView.as_view('repassword'), methods=['get', 'post'])
 bp.add_url_rule('/post', view_func=PostView.as_view('post'), methods=['get', 'post'])
 bp.add_url_rule('/tag', view_func=TagView.as_view('tag'), methods=['get', 'post'])
+bp.add_url_rule('/post_list', view_func=PostListView.as_view('post_list'), methods=['get', 'post'])
 
 
 def init_app(app):

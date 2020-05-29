@@ -121,8 +121,10 @@ $(function () {
         }
         // $("input[type='checkbox']").prop("checked",$(this).prop("checked"));
     })
+
+
     $("#group-del").click(function () {
-        var comment_ids = [];
+        var post_ids = [];
         var comments_ches = $('input:checkbox:checked')
         if (comments_ches.length === 0) {
             swal('请勾选需要删除的帖子')
@@ -130,7 +132,7 @@ $(function () {
         }
         for (var i = 0; i < comments_ches.length; i++) {
             var cro = comments_ches[i].getAttribute('data-post-id');
-            comment_ids.push(cro)
+            post_ids.push(cro)
             var par = comments_ches[i].parentNode.parentNode
         }
         zlalert.alertConfirm({
@@ -139,20 +141,17 @@ $(function () {
             "msg": "确定要删除帖子吗？",
             "confirmCallback": function () {
                 zlajax.post({
-                    'url': '/cms/post_large_del/',
+                    'url': '/admin/post_list',
+                    traditional: true,
                     'data': {
-                        'comment_ids': comment_ids.toString(),
+                        'id': post_ids,
                     },
                     'success': function (data) {
-                        if (data['code'] == 200) {
-                            swal('删除成功')
-                            for (var i = 0; i < comments_ches.length; i++) {
-                                var cro = comments_ches[i].getAttribute('data-post-id');
-                                var par = comments_ches[i].parentNode.parentNode
-                                par.remove();
-                            }
-                        } else {
-                            swal('删除失败', '', 'error')
+                        swal('删除成功')
+                        for (var i = 0; i < comments_ches.length; i++) {
+                            var cro = comments_ches[i].getAttribute('data-post-id');
+                            var par = comments_ches[i].parentNode.parentNode
+                            par.remove();
                         }
                     }
                 })
@@ -161,35 +160,9 @@ $(function () {
     })
 })
 
+
 $(function () {
-    $(".hight-light-btn").click(function (event) {
-        event.preventDefault();
-        var msg;
-        var type = $(this).attr('data-type');
-        var post_id = $(this).parent().parent().attr('data-post-id')
-        zlajax.post({
-            'url': '/cms/hight_light/',
-            'data': {
-                'post_id': post_id,
-                'type': type,
-            },
-            'success': function (data) {
-                if (type == 'de_hilight') {
-                    msg = '取消加精成功'
-                } else {
-                    msg = '加精成功'
-                }
-                if (data['code'] == 200) {
-                    swal('提示', msg);
-                    setTimeout(function () {
-                        window.location.reload()
-                    }, 1000)
-                } else {
-                    swal(data['message'], 'error')
-                }
-            }
-        })
-    })
+    //删除单个帖子
     $(".del-btn").click(function () {
         var post_id = $(this).attr('data-id');
         console.log(post_id);
@@ -199,17 +172,16 @@ $(function () {
             "msg": "确定要删除帖子？",
             "confirmCallback": function () {
                 zlajax.post({
-                    'url': '/cms/posts/',
+                    'url': '/admin/post_list',
                     'data': {
-                        'post_id': post_id
+                        'id': post_id
                     },
                     'success': function (data) {
-                        if (data['code'] == 200) {
-                            swal('删除成功');
-                            setTimeout(function () {
-                                window.location.reload()
-                            }, 500)
-                        }
+                        swal('删除成功');
+                        setTimeout(function () {
+                            window.location.reload()
+                        }, 500)
+
                     }
                 })
             }

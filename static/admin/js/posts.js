@@ -38,7 +38,7 @@ $(function () {
                 if (data['code'] == 201) {
                     swal('发表成功');
                     setTimeout(function () {
-                        window.location.href = '/'
+                        window.location.href = '/admin/post_list'
                     })
                 } else {
                     swal('发表失败', '', 'error')
