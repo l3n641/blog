@@ -5,7 +5,7 @@ import logging
 from flask import Flask
 
 from app import resources
-from app.extensions import api, db, migrate, redis, editor
+from app.extensions import api, db, migrate, redis, editor, bootstrap
 from app.admin import routers
 
 
@@ -23,5 +23,6 @@ def create_app(object_name):
     redis.init_app(app)
     routers.init_app(app)
     editor.init_app(app)
+    bootstrap.init_app(app)
 
     return app
