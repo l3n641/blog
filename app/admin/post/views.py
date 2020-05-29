@@ -1,7 +1,7 @@
 from app.admin.common_view import CommonView
 from flask import render_template, g, request
 from .forms import PostForm
-from flask_restful import reqparse, Resource
+from flask_restful import reqparse, marshal, fields
 from app.extensions import editor
 from app.services import post_srv, tag_srv
 from app.constants import DEFAULT_PAGE
@@ -59,3 +59,26 @@ class PostListView(CommonView):
         else:
             return self._service.get_error(), 400
 
+
+class PostSeachView(CommonView):
+    """
+    posts 搜索
+    """
+
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("title", type=str, required=True, help="标题必须存在")
+        form_data = parser.parse_args()
+        posts = post_srv.search('title', form_data.get("title"))
+
+        data = marshal(posts, {
+            "id": fields.Integer,
+            "title": fields.String,
+            "content": fields.String,
+            "author_id": fields.Integer(attribute="author.id"),
+            "username": fields.String(attribute="author.username"),
+            "email": fields.String(attribute="author.email"),
+            "create_time": fields.DateTime("iso8601"),
+        })
+
+        return {"code": 200, "data": data}

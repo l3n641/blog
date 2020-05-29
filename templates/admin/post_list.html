@@ -18,7 +18,7 @@
             <div style="float: right">
                 <div class="layui-inline">
                     <div class="layui-input-inline">
-                        <input value="" placeholder="请输入关键字" class="layui-input search_input" type="text"
+                        <input value="" placeholder="请输入标题的关键字" class="layui-input search_input" type="text"
                                name="post_name"
                         >
                     </div>
@@ -89,10 +89,7 @@
                     <th>内容</th>
                     <th>用户名</th>
                     <th>邮箱</th>
-                    <th>评论数</th>
-                    <th>查看数</th>
                     <th>发表时间</th>
-                    <th>加精</th>
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -104,24 +101,10 @@
                     <td>
                         <a href="#" title="#" v-html="post.content"></a>
                     </td>
-                    <td>[[post.nickname]]</td>
+                    <td>[[post.username]]</td>
                     <td>[[post.email]]</td>
-                    <td>[[post.comment_count]]</td>
-                    <td>[[post.read_count]]</td>
                     <td>[[post.create_time]]</td>
-                    <td>
-                        <button class="layui-btn layui-btn-warm hight-light-btn"
-                                type="de_hilight" v-if="post.hight_light!=''" v-on:click="hightlight"
-                                :post_id="post.post_id">
-                            <i class="layui-icon layui-icon-down"></i>取消
 
-                        </button>
-                        <button class="layui-btn hight-light-btn"
-                                type="hilight" v-if="post.hight_light===''" v-on:click="hightlight"
-                                :post_id="post.post_id">
-                            <i class="layui-icon layui-icon-up"></i>加精
-                        </button>
-                    </td>
                     <td>
                         <button class="layui-btn layui-btn-danger layui-btn-xs del-btn" :post_id="post.post_id"
                                 v-on:click="delpost">

@@ -12,12 +12,10 @@ $(function () {
                 var post_name = $("input[name='post_name']").val();
                 var vm = this;
                 zlajax.post({
-                    'url': '/search/',
+                    'url': '/admin/post_search',
                     async: false,
                     'data': {
                         'title': post_name,
-                        'post_id': '',
-                        'type': '',
                     },
                     'success': function (data) {
                         if (data['code'] == 200) {
@@ -34,16 +32,11 @@ $(function () {
                                     {
                                         'title': my_title,
                                         'content': my_content,
-                                        'nickname': posts_return[i].nickname,
+                                        'username': posts_return[i].username,
                                         'email': posts_return[i].email,
-                                        'read_count': posts_return[i].read_count,
-                                        'comment_count': posts_return[i].comment_count,
                                         'create_time': posts_return[i].create_time,
-                                        'cover': posts_return[i].cover,
                                         'post_id': posts_return[i].id,
-                                        'avatar': posts_return[i].avatar,
-                                        'hight_light': posts_return[i].hight_light,
-                                        'user_id': posts_return[i].user_id
+                                        'user_id': posts_return[i].author_id
                                     }
                                 )
                             }
@@ -54,31 +47,7 @@ $(function () {
                     }
                 })
             },
-            hightlight: function (a) {
-                var post_id = a.target.attributes.post_id.nodeValue;
-                var type = a.target.attributes.type.nodeValue;
-                var that = this;
-                var msg;
-                zlajax.post({
-                    'url': '/cms/hight_light/',
-                    'data': {
-                        'post_id': post_id,
-                        'type': type,
-                    },
-                    'success': function (data) {
-                        if (type == 'de_hilight') {
-                            that.Search().click();
-                        } else {
-                            msg = '加精成功'
-                        }
-                        if (data['code'] == 200) {
-                            that.Search().click();
-                        } else {
-                            swal(data['message'], 'error')
-                        }
-                    }
-                })
-            },
+
             delpost: function (e) {
                 var post_id = e.target.attributes.post_id.nodeValue;
                 var current = e.target
@@ -90,15 +59,14 @@ $(function () {
                     "msg": "确定要删除帖子？",
                     "confirmCallback": function () {
                         zlajax.post({
-                            'url': '/cms/posts/',
+                            'url': '/admin/post_list',
                             'data': {
-                                'post_id': post_id
+                                'id': post_id
                             },
                             'success': function (data) {
-                                if (data['code'] == 200) {
-                                    swal('删除成功');
-                                    par.empty();
-                                }
+                                swal('删除成功');
+                                par.empty();
+
                             }
                         })
                     }
