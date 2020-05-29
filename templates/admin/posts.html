@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="{{ static("front/css/index.css") }}">
     <script src="{{ static("admin/js/tags.js") }}"></script>
     <script src="{{ static("admin/js/posts.js") }}"></script>
-    <script src="{{ static("common/ckeditor/ckeditor.js") }}"></script>
 
     <link rel="stylesheet" href="{{ static("front/css/apost.css") }}">
 
@@ -19,24 +18,25 @@
         <div class="col-md-12">
             <div class="layui-form-item">
                 <input type="text" name="title" required lay-verify="required" placeholder="请输入标题"
-                       autocomplete="off"
+                       autocomplete="off" value="{% if post %} {{ post.title }} {% endif %}"
                        class="layui-input">
             </div>
-            {{ ckeditor.create() }}
-
-
+            <textarea class="ckeditor" name="ckeditor"
+                      style="visibility: hidden; display: none;">
+                {% if post %} {{ post.content }} {% endif %}
+            </textarea>
             <div id="app">
 
                 <div class="sub-group">
-                    <div class="tag-group">
+                    <div class="tag-group" id="tag" {% if post %} data-tag-ids="{{ post.tag_ids }}" {% endif %}>
                         <div class="hd">选择标签(最多可选3个)</div>
                         <div v-for="tag in tags" class="mycheck">
-                            <input type="checkbox" v-bind:value="tag.id" :id='tag.id'>
+                            <input type="checkbox" v-bind:value="tag.id" :id='tag.id' v-model="tags_checked">
                             <label :for="tag.id">[[tag.name]]</label>
                         </div>
                     </div>
 
-                    <div class="btn-group">
+                    <div class="btn-group ">
                         <div class="layui-form-item" style="margin-top:20px;">
                             <input type="text" name="tagname" placeholder="没有喜欢的？输入一个" class="layui-input">
                         </div>
@@ -44,7 +44,16 @@
                             <i class="layui-icon layui-icon-note"></i>
                             添加标签
                         </button>
-                        <button class="layui-btn layui-bg-blue" id="submit-btn" style="float: left"> 发布</button>
+                        {% if post %}
+                            <button class="layui-btn layui-bg-blue" id="submit-btn" style="float: left"
+                                    data-url="{{ url_for('admin.post_detail',_id=post.id) }}"> 更新
+                            </button>
+                        {% else %}
+                            <button class="layui-btn layui-bg-blue" id="submit-btn" style="float: left"
+                                    data-url="{{ url_for('admin.post') }}"> 发布
+                            </button>
+                        {% endif %}
+
                     </div>
                 </div>
 
@@ -54,10 +63,16 @@
     </div>
 
 
-    {{ ckeditor.load() }}
+    {{ ckeditor.load(static("common/ckeditor/ckeditor.js")) }}
     {{ ckeditor.config() }}
 
     <!--具体内容盒子结束-->
 {% endblock %}
+
+
+
+
+
+
 
 

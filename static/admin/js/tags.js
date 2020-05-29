@@ -1,13 +1,18 @@
+var app;
 $(function () {
-    new Vue({
+    app = new Vue({
         el: "#app",
         delimiters: ['[[', ']]'],
         data: {
-            tags: []
+            tags: [],
+            tags_checked: [],
         },
         computed: {},
         beforeCreate() {
             var that = this
+            var tag_ids = $("#tag").data("tag-ids");
+            tag_ids = tag_ids ? tag_ids : []
+
             this.$nextTick(function () {
 
                 zlajax.get(
@@ -17,6 +22,8 @@ $(function () {
 
                         'success': function (data) {
                             that.tags = data.tags
+                            that.tags_checked = tag_ids
+
                         }
                     }
                 )

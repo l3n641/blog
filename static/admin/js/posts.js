@@ -1,7 +1,7 @@
-
-
 $(function () {
     $("#submit-btn").click(function () {
+
+        var url = $("#submit-btn").data("url");
         var content = CKEDITOR.instances.ckeditor.getData();
 
         var title = $("input[name='title']").val();
@@ -26,8 +26,9 @@ $(function () {
             swal('至少添加一个标签o ~')
             return;
         }
+
         zlajax.post({
-            'url': '/admin/post',
+            'url': url,
             traditional: true,
             'data': {
                 'content': content,
@@ -35,14 +36,11 @@ $(function () {
                 'tags': tags
             },
             'success': function (data) {
-                if (data['code'] == 201) {
-                    swal('发表成功');
-                    setTimeout(function () {
-                        window.location.href = '/admin/post_list'
-                    })
-                } else {
-                    swal('发表失败', '', 'error')
-                }
+                swal('发表成功');
+                setTimeout(function () {
+                    window.location.href = '/admin/post_list'
+                })
+
             }
         })
 
