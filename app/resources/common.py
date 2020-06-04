@@ -6,7 +6,7 @@ from flask import abort, g
 from flask_restful import Resource, marshal
 
 from app.functions import camel_to_underline
-from app.parsers import page_parser, create_time_parser
+from app.parsers import page_parser, create_time_parser,order_parser
 
 
 class Common(Resource):
@@ -55,7 +55,14 @@ class Common(Resource):
                 where["create_time"]['lt'] = end_time
 
         page_args = page_parser.parse_args()
+        order_args=order_parser.parse_args()
+        order=None
+        if order_args.get('order_field') and order_args.get('order_field') in self._service.columns :
+            order={
+                order_args.get('order_field'):order_args.get('order_type')
+            }
         data = self._service.get_list(where=where,
+                                      order=order,
                                       page=page_args['page'],
                                       page_size=page_args['page_size'])
 

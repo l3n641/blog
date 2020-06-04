@@ -51,3 +51,6 @@ create_time_parser.add_argument(
     required=False,
     location=['args'],
 )
+order_parser = reqparse.RequestParser()
+order_parser.add_argument('order_field', type=str, required=False, default=None, location=["args"])
+order_parser.add_argument('order_type', type=str, required=False, default="desc", location=["args"])
