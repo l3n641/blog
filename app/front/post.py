@@ -17,8 +17,8 @@ posts_fields = {
 
 
 class Post(Common):
-    def get(self,id=None):
+    def get(self, id=None):
         self._fields = posts_fields
+        if id:
+            self._service.update_read(id)
         return self._get(_id=id)
-
-

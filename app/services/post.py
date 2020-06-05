@@ -11,3 +11,15 @@ class PostService(CommonService):
         self.columns.append('tags')
         self.columns.append('post_views')
         return super(PostService, self).save(**kwargs)
+
+    def update_read(self, post_id):
+        """
+        更新阅读量
+        """
+        from app.models import PostViews
+        from app.extensions import db
+
+        data = PostViews.query.filter(PostViews.post_id == post_id).with_for_update().one()
+        data.amount = data.amount + 1
+        db.session.add(data)
+        db.session.commit()
