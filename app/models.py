@@ -38,7 +38,7 @@ class Post(Base):
     content = db.Column(db.Text, nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey("admin.id"))
     author = db.relationship("Admin", backref='post')
-    post_views=db.relationship("PostViews",uselist=False, backref="post")
+    post_views = db.relationship("PostViews", uselist=False, backref="post")
 
 
 post_tag = db.Table(
@@ -60,4 +60,11 @@ class PostViews(db.Model):
 
     amount = db.Column(db.Integer, nullable=False, server_default="0")
     post_id = db.Column(db.Integer, db.ForeignKey("post.id"), primary_key=True)
+
+
+class Category(Base):
+    __tablename__ = "category"
+
+    name = db.Column(db.String(64), nullable=False)
+    parent_id = db.Column(db.Integer, nullable=False, server_default="0")
 
